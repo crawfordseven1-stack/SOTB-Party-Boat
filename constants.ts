@@ -7,7 +7,7 @@ export const pageData: PageData = {
     subtitle: "America's Largest Latin Boat Cruise Party",
     date: "October 25, 2025 | Boarding at 8:00 PM, Sailing from 9:00 PM - 12:00 AM",
     location: "Inspiration Hornblower Yacht, San Diego, CA",
-    videoURL: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&loop=1&playlist=dQw4w9WgXcQ&controls=0&showinfo=0&autohide=1&modestbranding=1"
+    videoURL: "https://www.youtube.com/embed/nu7CzQ7G0DA?autoplay=1&mute=1&loop=1&playlist=nu7CzQ7G0DA&controls=0&showinfo=0&autohide=1&modestbranding=1"
   },
   aboutSection: {
     title: "About the Event",
