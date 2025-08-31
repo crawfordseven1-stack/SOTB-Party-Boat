@@ -16,6 +16,18 @@ const SkullIcon: React.FC = () => (
   </svg>
 );
 
+const TicketIcon: React.FC = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+  </svg>
+);
+
+const CalendarIcon: React.FC = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+    </svg>
+);
+
 
 const AboutSection: React.FC<AboutSectionProps> = ({ data }) => {
   return (
@@ -44,6 +56,28 @@ const AboutSection: React.FC<AboutSectionProps> = ({ data }) => {
                 ))}
             </ul>
         </div>
+
+        <div className="mt-12">
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+                <a 
+                  href={data.ticketUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center bg-orange-500 text-black font-bold text-lg py-4 px-10 rounded-full uppercase tracking-wider hover:bg-orange-400 transform hover:scale-105 transition-all duration-300 shadow-lg shadow-orange-500/30 w-full sm:w-auto">
+                    <TicketIcon />
+                    Buy Tickets
+                </a>
+                <a 
+                  href={data.googleCalendarLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center border-2 border-orange-400 text-orange-400 font-bold text-lg py-3.5 px-10 rounded-full uppercase tracking-wider hover:bg-orange-400/20 transform hover:scale-105 transition-all duration-300 w-full sm:w-auto">
+                    <CalendarIcon />
+                    Save the Date
+                </a>
+            </div>
+        </div>
+
       </div>
     </section>
   );

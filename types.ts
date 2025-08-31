@@ -12,6 +12,8 @@ export interface AboutSectionData {
   description: string[];
   callToAction: string;
   features: string[];
+  ticketUrl: string;
+  googleCalendarLink: string;
 }
 
 export interface Performer {

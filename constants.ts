@@ -25,7 +25,9 @@ export const pageData: PageData = {
       "Laser Light Show (Reggaeton Floor)",
       "Photographers",
       "Halloween Costume Party w/ Dia de Los Muertos Decor"
-    ]
+    ],
+    ticketUrl: "https://www.saboronthebay.com/sabor-on-the-bay-events/sd-dia-de-los-muertos-cruise/",
+    googleCalendarLink: "https://www.google.com/calendar/render?action=TEMPLATE&text=Sabor+On+The+Bay+-+D%C3%ADa+De+Los+Muertos+Cruise&dates=20251026T030000Z/20251026T070000Z&details=America%27s+Largest+Latin+Boat+Cruise+Party.+Boarding+at+8%3A00+PM%2C+Sailing+from+9%3A00+PM+-+12%3A00+AM.&location=Inspiration+Hornblower+Yacht%2C+San+Diego%2C+CA"
   },
   soundsSection: {
     title: "The Sounds of the Night",
