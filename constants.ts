@@ -29,13 +29,42 @@ export const pageData: PageData = {
     ticketUrl: "https://www.saboronthebay.com/sabor-on-the-bay-events/sd-dia-de-los-muertos-cruise/",
     googleCalendarLink: "https://www.google.com/calendar/render?action=TEMPLATE&text=Sabor+On+The+Bay+-+D%C3%ADa+De+Los+Muertos+Cruise&dates=20251026T030000Z/20251026T070000Z&details=America%27s+Largest+Latin+Boat+Cruise+Party.+Boarding+at+8%3A00+PM%2C+Sailing+from+9%3A00+PM+-+12%3A00+AM.&location=Inspiration+Hornblower+Yacht%2C+San+Diego%2C+CA"
   },
+  gallerySection: {
+    title: "Experience The Vibe",
+    items: [
+      {
+        src: "https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        alt: "Vibrant concert with colorful lights and a crowd"
+      },
+      {
+        src: "https://images.pexels.com/photos/2111513/pexels-photo-2111513.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        alt: "Woman with intricate Dia de los Muertos face paint"
+      },
+      {
+        src: "https://images.pexels.com/photos/1684187/pexels-photo-1684187.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        alt: "DJ mixing music at a lively party"
+      },
+      {
+        src: "https://images.pexels.com/photos/2747901/pexels-photo-2747901.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        alt: "Group of friends dancing and enjoying the cruise"
+      },
+      {
+        src: "https://images.pexels.com/photos/103561/pexels-photo-103561.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        alt: "Luxury yacht sailing on the water during a beautiful sunset"
+      },
+      {
+        src: "https://images.pexels.com/photos/713149/pexels-photo-713149.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        alt: "Guests laughing and having a great time on the boat"
+      }
+    ]
+  },
   soundsSection: {
     title: "The Sounds of the Night",
     description: "Get ready to move with the best Latin beats from across the region, with each floor offering a unique flavor.",
     liveBand: {
       name: "CUMBIA BRAVA",
       info: "Based in Los Angeles",
-      imageUrl: "/user/f4f3d1e1-e630-4e3f-a3ac-6e47d10c0e52/image.jpeg"
+      imageUrl: "https://images.pexels.com/photos/167491/pexels-photo-167491.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
     },
     artists: [
       {
@@ -45,7 +74,7 @@ export const pageData: PageData = {
           {
             name: "DJ FARLEY",
             info: "Catch him at TangoDelRey",
-            imageUrl: "/user/3644f1c7-c598-4395-9769-1c93a8d8e575/image.jpeg"
+            imageUrl: "https://images.pexels.com/photos/6598953/pexels-photo-6598953.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
           }
         ]
       },
@@ -56,7 +85,7 @@ export const pageData: PageData = {
           {
             name: "DJ RAGS",
             info: "One of California's best",
-            imageUrl: "/user/e8c89b88-15aa-4c28-98e3-066c0d6f43fd/image.jpeg"
+            imageUrl: "https://images.pexels.com/photos/3756774/pexels-photo-3756774.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
           }
         ]
       },
@@ -67,7 +96,7 @@ export const pageData: PageData = {
           {
             name: "DJ ARGENIS",
             info: "Dominican flavor",
-            imageUrl: "/user/18146740-4131-4876-b605-64d1f2e96414/image.jpeg"
+            imageUrl: "https://images.pexels.com/photos/7181079/pexels-photo-7181079.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
           }
         ]
       }

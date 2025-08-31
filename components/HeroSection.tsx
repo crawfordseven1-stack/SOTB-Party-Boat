@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect, DragEvent } from 'react';
 import { HeroSectionData } from '../types';
 
 interface HeroSectionProps {
@@ -19,18 +19,103 @@ const CalendarIcon: React.FC = () => (
 );
 
 const HeroSection: React.FC<HeroSectionProps> = ({ data }) => {
+  const [background, setBackground] = useState<{ type: 'image' | 'video' | 'iframe'; src: string } | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  useEffect(() => {
+    if (data.videoURL) {
+      setBackground({ type: 'iframe', src: data.videoURL });
+    } else if (data.imageURL) {
+      setBackground({ type: 'image', src: data.imageURL });
+    }
+  }, [data.videoURL, data.imageURL]);
+
+  const handleDragOver = (e: DragEvent<HTMLElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: DragEvent<HTMLElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: DragEvent<HTMLElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onload = (loadEvent) => {
+        if (loadEvent.target?.result) {
+          const newSrc = loadEvent.target.result as string;
+          const type = file.type.startsWith('video/') ? 'video' : 'image';
+          setBackground({ type, src: newSrc });
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const renderBackground = () => {
+    if (!background) return <div className="absolute inset-0 bg-gray-800"></div>;
+    
+    switch (background.type) {
+      case 'iframe':
+        return (
+          <iframe
+            className="w-full h-full object-cover"
+            src={background.src}
+            frameBorder="0"
+            allow="autoplay; encrypted-media"
+            allowFullScreen
+            title="background-video"
+          ></iframe>
+        );
+      case 'image':
+        return (
+          <div
+            className="w-full h-full bg-cover bg-center"
+            style={{ backgroundImage: `url(${background.src})` }}
+          />
+        );
+      case 'video':
+        return (
+          <video
+            className="w-full h-full object-cover"
+            src={background.src}
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
+        );
+      default:
+        return <div className="absolute inset-0 bg-gray-800"></div>;
+    }
+  };
+
   return (
-    <section className="relative h-screen flex flex-col items-center justify-center text-center text-white overflow-hidden">
+    <section 
+      className="relative h-screen flex flex-col items-center justify-center text-center text-white overflow-hidden"
+      aria-label="Hero section with event details"
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+    >
+      {isDragging && (
+        <div className="absolute inset-0 bg-black bg-opacity-75 flex items-center justify-center z-30 border-4 border-dashed border-orange-500 pointer-events-none">
+          <p className="text-2xl font-bold text-white">Drop to change background</p>
+        </div>
+      )}
       <div className="absolute top-0 left-0 w-full h-full bg-black opacity-60 z-10"></div>
       <div className="absolute top-0 left-0 w-full h-full z-0">
-        <iframe
-          className="w-full h-full object-cover"
-          src={data.videoURL}
-          frameBorder="0"
-          allow="autoplay; encrypted-media"
-          allowFullScreen
-          title="background-video"
-        ></iframe>
+        {renderBackground()}
       </div>
       
       <div className="relative z-20 p-4 max-w-3xl">

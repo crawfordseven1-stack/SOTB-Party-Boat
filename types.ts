@@ -1,10 +1,10 @@
-
 export interface HeroSectionData {
   title: string;
   subtitle: string;
   date: string;
   location: string;
-  videoURL: string;
+  videoURL?: string;
+  imageURL?: string;
 }
 
 export interface AboutSectionData {
@@ -14,6 +14,17 @@ export interface AboutSectionData {
   features: string[];
   ticketUrl: string;
   googleCalendarLink: string;
+}
+
+export interface GalleryItem {
+  src: string; // Used for video poster or image source
+  alt: string;
+  videoSrc?: string; // Video source is optional for user-uploaded images
+}
+
+export interface GallerySectionData {
+  title: string;
+  items: GalleryItem[];
 }
 
 export interface Performer {
@@ -55,6 +66,7 @@ export interface PageData {
   pageTitle: string;
   heroSection: HeroSectionData;
   aboutSection: AboutSectionData;
+  gallerySection: GallerySectionData;
   soundsSection: SoundsSectionData;
   ctaSection: CtaSectionData;
   socialMedia: SocialMediaLink[];

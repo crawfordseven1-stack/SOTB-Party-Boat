@@ -1,11 +1,85 @@
-import React from 'react';
-import { SoundsSectionData, Artist } from '../types';
 
-interface SoundsSectionProps {
-  data: SoundsSectionData;
+import React, { useState, useRef, DragEvent, ReactNode } from 'react';
+import { SoundsSectionData, Artist, Performer } from '../types';
+
+const ImageDropzone: React.FC<{
+  onImageUpload: (newImageUrl: string) => void;
+  children: ReactNode;
+  className?: string;
+  shape?: 'rect' | 'circle';
+}> = ({ onImageUpload, children, className = '', shape = 'rect' }) => {
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const processFile = (file: File) => {
+    if (!file || !file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        if (e.target?.result) {
+            onImageUpload(e.target.result as string)
+        }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleDragOver = (e: DragEvent) => { e.preventDefault(); e.stopPropagation(); setIsDragging(true); };
+  const handleDragLeave = (e: DragEvent) => { e.preventDefault(); e.stopPropagation(); setIsDragging(false); };
+  const handleDrop = (e: DragEvent) => {
+    e.preventDefault(); e.stopPropagation(); setIsDragging(false);
+    if (e.dataTransfer.files?.[0]) processFile(e.dataTransfer.files[0]);
+  };
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.[0]) processFile(e.target.files[0]);
+  };
+  
+  const overlayShapeClass = shape === 'circle' ? 'rounded-full' : 'rounded-lg';
+
+  return (
+    <div
+      className={`relative group cursor-pointer ${className}`}
+      onClick={() => fileInputRef.current?.click()}
+      onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}
+    >
+      <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="image/*" />
+      {children}
+      <div className={`absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center transition-opacity duration-300 ${overlayShapeClass} ${isDragging ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+        <p className="text-white text-center font-bold text-sm px-2">{isDragging ? 'Drop Image' : 'Change Photo'}</p>
+      </div>
+    </div>
+  );
+};
+
+interface PerformerDisplayProps {
+  performer: Performer;
+  onImageChange: (newUrl: string) => void;
 }
 
-const ArtistCard: React.FC<{ artist: Artist }> = ({ artist }) => (
+const PerformerDisplay: React.FC<PerformerDisplayProps> = ({ performer, onImageChange }) => {
+  return (
+    <div>
+      {performer.imageUrl && (
+        <ImageDropzone onImageUpload={onImageChange} shape="circle" className="w-28 h-28 mx-auto">
+          <img
+            src={performer.imageUrl}
+            alt={performer.name}
+            className="w-28 h-28 object-cover rounded-full mx-auto border-2 border-orange-500/50 shadow-md transition-opacity duration-300 group-hover:opacity-40"
+          />
+        </ImageDropzone>
+      )}
+      <p className="font-bold text-xl text-white mt-3">{performer.name}</p>
+      <p className="text-sm text-gray-400">{performer.info}</p>
+    </div>
+  );
+};
+
+
+interface ArtistCardProps {
+  artist: Artist;
+  artistIndex: number;
+  onImageChange: (artistIndex: number, performerIndex: number, newUrl: string) => void;
+}
+
+const ArtistCard: React.FC<ArtistCardProps> = ({ artist, artistIndex, onImageChange }) => (
   <div className="bg-gray-800 bg-opacity-50 border border-orange-500/30 rounded-lg p-6 transform hover:scale-105 hover:border-orange-500 transition-all duration-300 shadow-lg h-full">
     <div className="text-center">
       <h3 className="text-2xl font-bold text-orange-400">{artist.floor}</h3>
@@ -13,17 +87,11 @@ const ArtistCard: React.FC<{ artist: Artist }> = ({ artist }) => (
       <div className="border-t border-gray-600 my-4"></div>
       <div className="space-y-4">
         {artist.performers.map((performer, index) => (
-          <div key={index}>
-            {performer.imageUrl && (
-              <img 
-                src={performer.imageUrl} 
-                alt={performer.name}
-                className="w-28 h-28 rounded-full mx-auto mb-3 object-cover border-2 border-orange-500/50 shadow-md"
-              />
-            )}
-            <p className="font-bold text-xl text-white">{performer.name}</p>
-            <p className="text-sm text-gray-400">{performer.info}</p>
-          </div>
+          <PerformerDisplay
+            key={index}
+            performer={performer}
+            onImageChange={(newUrl) => onImageChange(artistIndex, index, newUrl)}
+          />
         ))}
       </div>
     </div>
@@ -36,25 +104,47 @@ const PhoneIcon: React.FC = () => (
     </svg>
 );
 
+interface SoundsSectionProps {
+    data: SoundsSectionData;
+}
+
 const SoundsSection: React.FC<SoundsSectionProps> = ({ data }) => {
+  const [soundsData, setSoundsData] = useState<SoundsSectionData>(data);
+
+  const handleBandImageChange = (newImageUrl: string) => {
+    if (soundsData.liveBand) {
+      setSoundsData(prev => ({ ...prev, liveBand: { ...prev.liveBand!, imageUrl: newImageUrl } }));
+    }
+  };
+
+  const handleArtistImageChange = (artistIndex: number, performerIndex: number, newImageUrl: string) => {
+    setSoundsData(prev => {
+      const newArtists = JSON.parse(JSON.stringify(prev.artists));
+      newArtists[artistIndex].performers[performerIndex].imageUrl = newImageUrl;
+      return { ...prev, artists: newArtists };
+    });
+  };
+
   return (
     <section className="py-20 px-6 bg-gray-900">
       <div className="max-w-5xl mx-auto text-center">
         <h2 className="font-cinzel text-4xl md:text-5xl font-bold text-orange-400 mb-4">{data.title}</h2>
         <p className="text-gray-300 mb-12 max-w-2xl mx-auto">{data.description}</p>
         
-        {data.liveBand && (
+        {soundsData.liveBand && (
           <div className="mb-16">
             <h3 className="text-3xl font-bold text-orange-300 mb-8 tracking-wider uppercase">Live Performance By</h3>
             <div className="bg-gray-800 bg-opacity-50 border border-orange-500/30 rounded-lg p-6 md:p-8 flex flex-col items-center gap-6 max-w-lg mx-auto shadow-lg">
-              <img 
-                src={data.liveBand.imageUrl} 
-                alt={data.liveBand.name}
-                className="w-full h-auto rounded-lg object-cover shadow-md"
-              />
+                <ImageDropzone onImageUpload={handleBandImageChange} className="w-full">
+                  <img
+                      src={soundsData.liveBand.imageUrl}
+                      alt={soundsData.liveBand.name}
+                      className="w-full h-auto rounded-lg shadow-md transition-opacity duration-300 group-hover:opacity-40"
+                  />
+                </ImageDropzone>
               <div className="text-center mt-4">
-                <h4 className="font-cinzel text-4xl font-bold text-white">{data.liveBand.name}</h4>
-                <p className="text-lg text-gray-400 mt-2">{data.liveBand.info}</p>
+                <h4 className="font-cinzel text-4xl font-bold text-white">{soundsData.liveBand.name}</h4>
+                <p className="text-lg text-gray-400 mt-2">{soundsData.liveBand.info}</p>
               </div>
             </div>
             <div className="border-t border-gray-700 my-12 max-w-sm mx-auto"></div>
@@ -62,8 +152,13 @@ const SoundsSection: React.FC<SoundsSectionProps> = ({ data }) => {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {data.artists.map((artist, index) => (
-            <ArtistCard key={index} artist={artist} />
+          {soundsData.artists.map((artist, index) => (
+            <ArtistCard 
+              key={index} 
+              artist={artist} 
+              artistIndex={index}
+              onImageChange={handleArtistImageChange}
+            />
           ))}
         </div>
 
